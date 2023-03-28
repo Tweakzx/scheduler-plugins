@@ -184,6 +184,7 @@ func (am *Antman) GpuScore(state *framework.CycleState, pod *v1.Pod, nodeInfo *s
 	bestIndex := -1
 	var minUtil float64
 	minUtil = 101
+	//todo:只是找最小， 没有采用binpack
 	for _, gpu := range *gpuInfos {
 		klog.Infof("%v: %v, %v", gpu.index, gpu.usedUtil, gpu.usedMem)
 		if gpu.usedUtil < limitedUtil && gpu.usedMem < limitedMem {
@@ -203,7 +204,7 @@ func (am *Antman) GpuScore(state *framework.CycleState, pod *v1.Pod, nodeInfo *s
 	return int64(score), nil
 }
 
-// ----------------------------------------------ReserverPlugin-----------------------------------------------------------
+// -----------------------------------------------ReserverPlugin-----------------------------------------------------------
 func (am *Antman) Reserve(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) *framework.Status {
 	klog.Infof("in Reserve for podName : %v", pod.Name)
 
@@ -237,6 +238,7 @@ func (am *Antman) Reserve(ctx context.Context, state *framework.CycleState, pod 
 			gpuDevices := strconv.Itoa(bestIndex)
 			podCopy.Annotations[AnnotationGPUVisibleDevices] = gpuDevices
 			podCopy.Annotations[AnnotationGpuConfigFile] = LocalCoordinatorCommFolder + podCopy.ObjectMeta.Name + "_sche2pai.json"
+
 			podCopy.Annotations[AnnotationGpuStatusFile] = LocalCoordinatorCommFolder + podCopy.ObjectMeta.Name + "_pai2sche.json"
 
 			// Patch annotations to pod

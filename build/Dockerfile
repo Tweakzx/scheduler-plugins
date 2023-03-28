@@ -11,16 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM golang:1.15.0
-
-WORKDIR /go/src/sigs.k8s.io/scheduler-plugins
-COPY . .
-ARG RELEASE_VERSION
-RUN RELEASE_VERSION=${RELEASE_VERSION} make build-scheduler
 
 FROM alpine:3.12
 
-COPY --from=0 /go/src/sigs.k8s.io/scheduler-plugins/bin/kube-scheduler /bin/kube-scheduler
-
-WORKDIR /bin
-CMD ["kube-scheduler"]
+COPY kube-scheduler /bin/kube-scheduler
+COPY scheduler-config.yaml /bin/scheduler-config.yaml 
+ENTRYPOINT ["kube-scheduler", "--config=/bin/scheduler-config.yaml"]

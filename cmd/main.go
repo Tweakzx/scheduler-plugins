@@ -21,10 +21,9 @@ import (
 	"os"
 	"time"
 
+	"k8s.io/klog"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
-
-	"sigs.k8s.io/scheduler-plugins/pkg/coscheduling"
-	"sigs.k8s.io/scheduler-plugins/pkg/qos"
+	"sigs.k8s.io/scheduler-plugins/pkg/antman"
 )
 
 func main() {
@@ -33,10 +32,13 @@ func main() {
 	// Later they can consist of scheduler profile(s) and hence
 	// used by various kinds of workloads.
 	command := app.NewSchedulerCommand(
-		app.WithPlugin(coscheduling.Name, coscheduling.New),
-		app.WithPlugin(qos.Name, qos.New),
+		app.WithPlugin(antman.Name, antman.New),
+		// app.WithPlugin(coscheduling.Name, coscheduling.New),
+		// app.WithPlugin(qos.Name, qos.New),
 	)
 	if err := command.Execute(); err != nil {
+		klog.Errorf("fail to exec command")
 		os.Exit(1)
 	}
+	klog.Infof("done of command exec")
 }
