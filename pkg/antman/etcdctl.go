@@ -20,9 +20,9 @@ func NewEtcdWrapper() *EtcdWrapper {
 
 	var cmd string
 	cmd = "etcd --endpoints=https://" + api_server_ip + ":" + api_server_port + " "
-	cmd += "--cacert=" + pem_prefix + "/ca.pem "
-	cmd += "--cert=" + pem_prefix + "/etcd-client.pem "
-	cmd += "--key=" + pem_prefix + "/etcd-client-key.pem "
+	cmd += "--cacert=" + pem_prefix + "/ca.crt "
+	cmd += "--cert=" + pem_prefix + "/peer.crt "
+	cmd += "--key=" + pem_prefix + "/ca.key "
 
 	os.Setenv("ETCDCTL_APP", "3")
 
