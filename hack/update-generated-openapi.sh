@@ -24,7 +24,7 @@ SCRIPT_ROOT=$(dirname ${BASH_SOURCE})/..
 export GOPATH="$(cd ${SCRIPT_ROOT} && pwd)/_output/local/go"
 mkdir -p $GOPATH
 
-go install k8s.io/kube-openapi/cmd/openapi-gen
+go install k8s.io/kube-openapi/cmd/openapi-gen@v0.0.0-20210305001622-591a79e4bda7
 
 KUBE_INPUT_DIRS=(
   $(
